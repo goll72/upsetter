@@ -1,4 +1,5 @@
-/// Parse an intersection key into a dictionary of set identifiers.
+/// Parse an intersection key into a dictionary of set identifiers,
+/// allowing to compose calls by passing a dictionary as the `seen` argument.
 ///
 /// ```examplec
 /// >>> import upsetter: _parse-inter-key

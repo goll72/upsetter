@@ -58,7 +58,9 @@
   /// -> float
   set-plot-ratio,
   /// -> float
-  inter-plot-ratio
+  inter-plot-ratio,
+  /// -> bool
+  show-axes
 ) = {
   // To reverse the direction when sorting in descending order,
   // the keys are multiplied by -1.
@@ -264,7 +266,8 @@
           inter-data,
           max-length: inter-plot-ratio * inter-plot-length,
           width: bar-width,
-          gap: bar-width * gap-inter-f
+          gap: bar-width * gap-inter-f,
+          show-axes: show-axes
         )
       }
     )
@@ -281,7 +284,8 @@
           sets-data,
           max-length: set-plot-ratio * set-plot-length,
           width: bar-width,
-          gap: bar-width * gap-sets-f
+          gap: bar-width * gap-sets-f,
+          show-axes: show-axes
         )
       }
     )

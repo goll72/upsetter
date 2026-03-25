@@ -39,10 +39,15 @@
     tick-step
   }
 
+  if max / tick-step > 8 {
+    tick-step *= 2
+  }
+
   let n-ticks = ceil(max / tick-step) + 1
   let actual-max = n-ticks * tick-step
 
-  // XXX
+  let D = -0.05
+
   if orientation == "h" {
     for (i, y) in data.enumerate() {
       let x = (i + 1) * gap + i * width
@@ -50,18 +55,35 @@
     }
 
     if show-axes {
-      
+      line((D, 0), (D, max / actual-max * max-length))
+
+      for i in range(n-ticks) {
+        let u = i / (n-ticks - 1) * max / actual-max * max-length
+        
+        line((D + 0.05, u), (D - 0.05, u))
+        content(anchor: "east", (D - 0.15, u), [
+          #set text(8pt)
+          $#(i * tick-step)$
+        ])
+      }
     }
   } else {
-    let rtl = true
-    
     for (i, x) in data.rev().enumerate() {
       let y = (i + 1) * gap + i * width
+      rect((max-length - x / max * max-length, y), (max-length, y + width), ..style)
+    }
 
-      if rtl {
-        rect((max-length - x / max * max-length, y), (max-length, y + width), ..style)
-      } else {
-        rect((0, y), (x / max * max-length, y + width), ..style)
+    if show-axes {
+      line((0, D), (max-length, D))
+
+      for i in range(n-ticks) {
+        let u = i / (n-ticks - 1) * max-length
+
+        line((u, D + 0.05), (u, D - 0.05))
+        content(anchor: "north", (u, D - 0.15), [
+          #set text(8pt)  
+          $#((n-ticks - 1 - i) * tick-step)$
+        ])
       }
     }
   }
@@ -78,7 +100,7 @@
   delim,
   /// -> float | none
   width: none,
-  /// -> float | none
+   /// -> float | none
   gap-sets: none,
   /// -> float | none
   gap-inter: none

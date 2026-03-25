@@ -228,5 +228,5 @@
     )
   }
 
-  return _plot(sets, inter, parsed-inter, labels, orientation, sort-key, delim, width, height, set-plot-ratio, inter-plot-ratio)
+  return _plot(sets, inter, parsed-inter, labels, orientation, sort-key, delim, width, height, set-plot-ratio, inter-plot-ratio, show-axes)
 }
