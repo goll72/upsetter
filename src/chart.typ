@@ -2,6 +2,8 @@
 #import "common.typ": _parse-inter-key
 
 #let _barchart(
+  /// -> string
+  legend,
   /// -> "h" | "v"
   orientation,
   /// -> array
@@ -44,48 +46,69 @@
   }
 
   let n-ticks = ceil(max / tick-step) + 1
-  let actual-max = n-ticks * tick-step
+  let actual-max = (n-ticks - 1) * tick-step
 
+  // Gap between axis and chart
   let D = -0.05
+
+  // Gap between legend and chart
+  // FIXME: should take width of axis tick labels into account when `orientation == "h"`
+  let Q = if show-axes and orientation == "v" {
+    0.65
+  } else if show-axes and orientation == "h" {
+    0.75
+  } else {
+    0.15
+  }
+
+  // Conversion factor from the "data" coordinate system to the "plot axes" coordinate system
+  let p = max-length / actual-max
+
+  let tick-text = i => text(8pt, $#(i * tick-step)$)
 
   if orientation == "h" {
     for (i, y) in data.enumerate() {
       let x = (i + 1) * gap + i * width
-      rect((x, 0), (x + width, y / actual-max * max-length), ..style)
+      rect((x, 0), (x + width, y * p), ..style)
     }
 
     if show-axes {
-      line((D, 0), (D, max / actual-max * max-length))
+      line((D, 0), (D, max-length))
 
       for i in range(n-ticks) {
-        let u = i / (n-ticks - 1) * max / actual-max * max-length
+        let u = i / (n-ticks - 1) * max-length + 0.01
         
         line((D + 0.05, u), (D - 0.05, u))
-        content(anchor: "east", (D - 0.15, u), [
-          #set text(8pt)
-          $#(i * tick-step)$
-        ])
+        content(anchor: "east", (D - 0.15, u), text(8pt, $#(i * tick-step)$))
       }
     }
+
+    if legend != none {
+      content((D - Q, max-length / 2), anchor: "center", angle: 90deg, text(9pt, legend))
+    } 
   } else {
+    // NOTE: This is rather ugly and can't be unified with the code for the
+    // opposite orientation as-is due to the origin of the coordinate system
+    // being at the lower left corner rather than the lower right corner.
     for (i, x) in data.rev().enumerate() {
       let y = (i + 1) * gap + i * width
-      rect((max-length - x / max * max-length, y), (max-length, y + width), ..style)
+      rect((max-length, y), (max-length - x * p, y + width), ..style)
     }
 
     if show-axes {
       line((0, D), (max-length, D))
 
       for i in range(n-ticks) {
-        let u = i / (n-ticks - 1) * max-length
+        let u = max-length - i / (n-ticks - 1) * max-length - 0.01
 
         line((u, D + 0.05), (u, D - 0.05))
-        content(anchor: "north", (u, D - 0.15), [
-          #set text(8pt)  
-          $#((n-ticks - 1 - i) * tick-step)$
-        ])
+        content(anchor: "north", (u, D - 0.15), text(8pt, $#(i * tick-step)$))
       }
     }
+
+    if legend != none {
+      content((max-length / 2, D - Q), anchor: "center", text(9pt, legend))
+    } 
   }
 }
 

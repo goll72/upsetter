@@ -1,5 +1,5 @@
 #import "deps.typ": *
-#import "plot.typ": _barchart, _interchart
+#import "chart.typ": _barchart, _interchart
 #import "common.typ": _parse-inter-key
 
 /// Given a dictionary of set identifiers and
@@ -26,18 +26,22 @@
 /// -> dictionary
 #let _make-sets(
   /// -> dictionary
-  inter
+  inter,
+  /// -> string
+  delim
 ) = {
   let seen = (:)
 
   for (k, _) in inter {
-    _parse-inter-key(k, seen)
+    seen = _parse-inter-key(k, delim, seen: seen)
   }
 
   return seen
 }
 
 #let _plot(
+  /// -> dictionary
+  legends,
   /// -> dictionary
   sets,
   /// -> dictionary
@@ -184,6 +188,7 @@
 
     let p
 
+    // XXX: this is rather overengineered and probably not needed
     while true {
       // The relation between an axis length (l/L), the corresponding ratio (r/R),
       // the bar width (w), the gap factor (g/G) and the number of elements plotted on
@@ -262,6 +267,7 @@
         }
         
         _barchart(
+          legends.inter,
           orientation,
           inter-data,
           max-length: inter-plot-ratio * inter-plot-length,
@@ -280,6 +286,7 @@
         }
 
         _barchart(
+          legends.sets,
           opposite(orientation),
           sets-data,
           max-length: set-plot-ratio * set-plot-length,

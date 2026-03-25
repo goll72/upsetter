@@ -108,7 +108,7 @@
 ///     )
 ///   )
 ///
-///   set align(center + horizon)
+///   v(3.5em)
 ///
 ///   figure(
 ///     cetz.canvas(plot),
@@ -205,7 +205,7 @@
   assert(within(inter-plot-ratio, 0.05, 0.95), message: "extreme values for intersection size plot ratio")
 
   let sets = if sets == none {
-    _make-sets(inter)
+    _make-sets(inter, delim)
   } else {
     sets.enumerate().map(it => it.rev()).to-dict()
   }
@@ -228,5 +228,5 @@
     )
   }
 
-  return _plot(sets, inter, parsed-inter, labels, orientation, sort-key, delim, width, height, set-plot-ratio, inter-plot-ratio, show-axes)
+  return _plot(legends, sets, inter, parsed-inter, labels, orientation, sort-key, delim, width, height, set-plot-ratio, inter-plot-ratio, show-axes)
 }
