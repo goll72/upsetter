@@ -201,8 +201,8 @@
 
   let within(x, a, b) = a <= x and x <= b
 
-  assert(within(set-plot-ratio, 0.05, 0.95), message: "extreme values for plot ratio")
-  assert(within(inter-plot-ratio, 0.05, 0.95), message: "extreme values for plot ratio")
+  assert(within(set-plot-ratio, 0.05, 0.95), message: "extreme values for set size plot ratio")
+  assert(within(inter-plot-ratio, 0.05, 0.95), message: "extreme values for intersection size plot ratio")
 
   let sets = if sets == none {
     _make-sets(inter)
