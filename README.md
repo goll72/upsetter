@@ -43,7 +43,9 @@ Here's an example of how to use this package:
 
 The code shown above will generate the following plot:
 
-![upsetter example output](docs/images/example.svg)
+<div align="center">
+  <img alt="upsetter example output" src="docs/images/example.svg">
+</div>
 
 For a description of all options available, you can read
 the [manual](manual.pdf).
